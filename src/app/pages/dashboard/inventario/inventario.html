@@ -1,0 +1,104 @@
+<div class="header-actions">
+  <div>
+    <h3>Inventario Central</h3>
+    <p class="subtitle">Gestiona el stock de cada producto por talla, color y sucursal.</p>
+  </div>
+  <button class="btn-primary" (click)="openModal()">+ Ingresar Stock</button>
+</div>
+
+<div class="table-container">
+  <div *ngIf="isLoading" class="loading-state">Cargando...</div>
+  
+  <table *ngIf="!isLoading">
+    <thead>
+      <tr>
+        <th>Sucursal</th>
+        <th>Producto</th>
+        <th>Talla</th>
+        <th>Color</th>
+        <th>Stock Disp.</th>
+        <th width="120">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let inv of inventarios">
+        <td>{{ inv.sucursal?.nombre || 'Desconocida' }}</td>
+        <td class="font-bold">{{ inv.producto?.nombre || 'Desconocido' }}</td>
+        <td><span class="badge badge-talla">{{ inv.talla?.nombre }}</span></td>
+        <td>
+          <div class="color-badge" [style.background-color]="inv.color?.codigo_hex">
+             <span class="color-text">{{ inv.color?.nombre }}</span>
+          </div>
+        </td>
+        <td class="font-bold text-primary">{{ inv.cantidad }} u.</td>
+        <td>
+          <div class="action-buttons">
+            <button class="btn-edit">Ajustar</button>
+          </div>
+        </td>
+      </tr>
+      <tr *ngIf="inventarios.length === 0">
+        <td colspan="6" class="empty-state">No hay stock registrado en el sistema.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" *ngIf="showModal">
+  <div class="modal-content glass-card">
+    <div class="modal-header">
+      <h3>Ingreso de Stock</h3>
+      <button class="btn-close" (click)="closeModal()">×</button>
+    </div>
+    <div class="modal-body">
+      
+      <div class="input-group">
+        <label>Sucursal Destino</label>
+        <select class="input-field" [(ngModel)]="nuevoRegistro.sucursal_id">
+          <option [ngValue]="null" disabled selected>Selecciona una sucursal...</option>
+          <option *ngFor="let s of sucursales" [ngValue]="s.id">{{ s.nombre }}</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label>Producto</label>
+        <select class="input-field" [(ngModel)]="nuevoRegistro.producto_id">
+          <option [ngValue]="null" disabled selected>Selecciona un producto...</option>
+          <option *ngFor="let p of productos" [ngValue]="p.id">{{ p.nombre }}</option>
+        </select>
+      </div>
+
+      <div class="grid-2-col">
+        <div class="input-group">
+          <label>Talla</label>
+          <select class="input-field" [(ngModel)]="nuevoRegistro.talla_id">
+            <option [ngValue]="null" disabled selected>Talla...</option>
+            <option *ngFor="let t of tallas" [ngValue]="t.id">{{ t.nombre }}</option>
+          </select>
+        </div>
+        
+        <div class="input-group">
+          <label>Color</label>
+          <select class="input-field" [(ngModel)]="nuevoRegistro.color_id">
+            <option [ngValue]="null" disabled selected>Color...</option>
+            <option *ngFor="let c of colores" [ngValue]="c.id">{{ c.nombre }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label>Cantidad a Ingresar</label>
+        <input type="number" class="input-field text-center font-bold" min="1" [(ngModel)]="nuevoRegistro.cantidad">
+      </div>
+
+    </div>
+    <div class="modal-footer">
+      <button class="btn-secondary" (click)="closeModal()">Cancelar</button>
+      <button class="btn-primary" (click)="guardar()" 
+              [disabled]="isSaving || !nuevoRegistro.sucursal_id || !nuevoRegistro.producto_id || !nuevoRegistro.talla_id || !nuevoRegistro.color_id">
+        {{ isSaving ? 'Guardando...' : 'Confirmar Ingreso' }}
+      </button>
+    </div>
+  </div>
+</div>

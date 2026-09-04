@@ -1,0 +1,88 @@
+<div class="pos-layout">
+  <div class="products-section glass-card">
+    <h3>Punto de Venta (POS)</h3>
+    
+    <div class="input-group">
+      <label>Sucursal de Venta</label>
+      <select class="input-field" [(ngModel)]="sucursalSeleccionada" [disabled]="cart.length > 0">
+        <option [ngValue]="null" disabled selected>Selecciona sucursal...</option>
+        <option *ngFor="let s of sucursales" [ngValue]="s.id">{{ s.nombre }}</option>
+      </select>
+      <small class="text-muted" *ngIf="cart.length > 0">No puedes cambiar de sucursal mientras tengas items en el carrito.</small>
+    </div>
+
+    <hr class="divider">
+
+    <div class="selectors" *ngIf="sucursalSeleccionada">
+      <div class="input-group">
+        <label>Producto</label>
+        <select class="input-field" [(ngModel)]="productoSeleccionado">
+          <option [ngValue]="null" disabled>Buscar producto...</option>
+          <option *ngFor="let p of productos" [ngValue]="p.id">{{ p.nombre }} - Bs.{{ p.precio }}</option>
+        </select>
+      </div>
+
+      <div class="variant-row" *ngIf="productoSeleccionado">
+        <div class="input-group">
+          <label>Talla</label>
+          <select class="input-field" [(ngModel)]="tallaSeleccionada">
+            <option [ngValue]="null" disabled>Elige...</option>
+            <option *ngFor="let t of tallas" [ngValue]="t.id">{{ t.nombre }}</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>Color</label>
+          <select class="input-field" [(ngModel)]="colorSeleccionado">
+            <option [ngValue]="null" disabled>Elige...</option>
+            <option *ngFor="let c of colores" [ngValue]="c.id">{{ c.nombre }}</option>
+          </select>
+        </div>
+        <div class="input-group">
+          <label>Cant.</label>
+          <input type="number" class="input-field" [(ngModel)]="cantidadSeleccionada" min="1">
+        </div>
+      </div>
+
+      <div class="stock-info" *ngIf="productoSeleccionado && tallaSeleccionada && colorSeleccionado">
+        <p>Stock disponible: <strong>{{ getStockDisponible() }}</strong></p>
+        <button class="btn-primary" (click)="addToCart()" [disabled]="getStockDisponible() < cantidadSeleccionada">Agregar al Carrito</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="cart-section glass-card">
+    <h3>Carrito de Compras</h3>
+    
+    <div class="cart-items">
+      <div *ngIf="cart.length === 0" class="empty-cart">
+        El carrito está vacío.
+      </div>
+      
+      <div class="cart-item" *ngFor="let item of cart; let i = index">
+        <div class="item-details">
+          <h4>{{ getProductoNombre(item.producto_id) }}</h4>
+          <p>{{ getTalla(item.talla_id) }} | {{ getColor(item.color_id) }}</p>
+        </div>
+        <div class="item-price">
+          <p>{{ item.cantidad }} x Bs.{{ item.precio_unitario }}</p>
+          <button class="btn-delete" (click)="removeFromCart(i)">×</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="cart-total" *ngIf="cart.length > 0">
+      <div class="total-row">
+        <span>Total:</span>
+        <span class="total-amount">Bs. {{ getTotal() }}</span>
+      </div>
+      
+      <div class="alert-success" *ngIf="ventaExitosa">
+        ¡Venta registrada exitosamente!
+      </div>
+      
+      <button class="btn-primary w-full btn-checkout" (click)="procesarVenta()" [disabled]="isProcessing">
+        {{ isProcessing ? 'Procesando...' : 'Completar Venta' }}
+      </button>
+    </div>
+  </div>
+</div>

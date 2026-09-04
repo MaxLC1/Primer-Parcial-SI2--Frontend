@@ -1,0 +1,129 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap');
+
+:root {
+  /* Paleta Light - Estilo E-commerce Moderno (Inspirado en tu imagen) */
+  --bg-color: #f4f3ef; /* Fondo cálido claro tipo arena/gris */
+  --surface-color: #ffffff; /* Tarjetas blancas sólidas */
+  --primary: #ea580c; /* Naranja corporativo (Hubspot style) */
+  --primary-hover: #c2410c;
+  --accent: #f97316; 
+  --text-main: #1e293b; /* Texto oscuro para alto contraste */
+  --text-muted: #64748b; 
+  --border-color: #cbd5e1;
+  --error: #dc2626;
+
+  /* Sombras limpias y elegantes */
+  --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+  --card-border: 1px solid #e2e8f0;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-main);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Tarjetas Base */
+.glass-card {
+  background: var(--surface-color);
+  border: var(--card-border);
+  box-shadow: var(--card-shadow);
+  border-radius: 12px;
+}
+
+/* Campos de texto globales */
+.input-field {
+  width: 100%;
+  padding: 12px 16px;
+  background: #f8fafc;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-main);
+  font-family: 'Outfit', sans-serif;
+  transition: all 0.3s ease;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.15);
+  background: #ffffff;
+}
+
+.input-field::placeholder {
+  color: #94a3b8;
+}
+
+/* Botones principales globales */
+.btn-primary {
+  width: 100%;
+  padding: 12px 24px;
+  background: var(--primary);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  font-weight: 600;
+  font-size: 1rem;
+  font-family: 'Outfit', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+  background: var(--primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(234, 88, 12, 0.25);
+}
+
+/* Botones de acción en tablas */
+.btn-edit {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-edit:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  background: rgba(234, 88, 12, 0.05);
+}
+
+.btn-delete {
+  background: transparent;
+  border: 1px solid #fca5a5;
+  color: var(--error);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-delete:hover {
+  border-color: var(--error);
+  color: white;
+  background: var(--error);
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}

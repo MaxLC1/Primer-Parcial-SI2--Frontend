@@ -1,0 +1,37 @@
+<div class="dashboard-layout">
+  <!-- Sidebar lateral -->
+  <aside class="sidebar glass-card">
+    <div class="logo-box">
+      <div class="logo-icon small"></div>
+      <h3>FashionStore</h3>
+    </div>
+    <nav class="nav-links">
+      <a routerLink="/dashboard/productos" routerLinkActive="active">Productos</a>
+      <a routerLink="/dashboard/categorias" routerLinkActive="active">Categorías</a>
+      <a routerLink="/dashboard/variantes" routerLinkActive="active">Tallas y Colores</a>
+      <a routerLink="/dashboard/inventario" routerLinkActive="active">Inventario</a>
+      <a routerLink="/dashboard/ventas" routerLinkActive="active">POS / Crear Venta</a>
+      <a routerLink="/dashboard/historial-ventas" routerLinkActive="active">Historial Reservas</a>
+      <a routerLink="/dashboard/sucursales" routerLinkActive="active">Sucursales</a>
+      <a routerLink="/dashboard/usuarios" routerLinkActive="active">Usuarios</a>
+    </nav>
+    <div class="logout">
+      <button class="btn-secondary" (click)="logout()">Cerrar Sesión</button>
+    </div>
+  </aside>
+
+  <!-- Contenido principal -->
+  <main class="main-content">
+    <header class="topbar">
+      <h2>Panel de Control</h2>
+      <a routerLink="/dashboard/perfil" class="user-profile" style="text-decoration: none; color: inherit; cursor: pointer;">
+        <span>Admin Supremo</span>
+        <div class="avatar"></div>
+      </a>
+    </header>
+
+    <div class="content-area glass-card">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+</div>
