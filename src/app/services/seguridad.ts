@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class SeguridadService {
-  private apiUrl = 'http://127.0.0.1:8000/api/v1/seguridad';
+  private apiUrl = 'http://34.230.18.9:8000/api/v1/seguridad';
 
   constructor(private http: HttpClient) {}
 

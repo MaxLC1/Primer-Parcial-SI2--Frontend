@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class InventarioService {
-  private apiUrl = 'http://127.0.0.1:8000/api/v1/sucursales';
+  private apiUrl = 'http://34.230.18.9:8000/api/v1/sucursales';
 
   constructor(private http: HttpClient) {}
 
