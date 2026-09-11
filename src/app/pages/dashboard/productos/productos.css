@@ -62,15 +62,22 @@ td { color: var(--text-main); font-size: 0.95rem; }
 }
 
 .modal-content {
-  width: 100%; max-width: 450px; background: white; padding: 24px;
-  max-height: 90vh; overflow-y: auto;
+  width: 100%; max-width: 650px; background: white; padding: 24px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
 }
 
-.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-shrink: 0; }
 .btn-close { background: transparent; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer; }
 
-.modal-body { margin-bottom: 24px; }
-.modal-footer { display: flex; justify-content: flex-end; gap: 12px; }
+.modal-body { 
+  margin-bottom: 24px; 
+  overflow-y: auto; 
+  flex-grow: 1; 
+  padding-right: 10px; 
+}
+.modal-footer { display: flex; justify-content: flex-end; gap: 12px; flex-shrink: 0; }
 .btn-secondary { width: auto; padding: 10px 20px; }
 
 .input-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }

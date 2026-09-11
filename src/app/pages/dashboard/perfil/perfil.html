@@ -9,11 +9,11 @@
   <div class="perfil-card glass-card">
     <div class="avatar-section">
       <div class="avatar-circle">
-        {{ usuario.nombre_completo.charAt(0).toUpperCase() }}
+        {{ usuario?.nombre_completo ? usuario.nombre_completo.charAt(0).toUpperCase() : 'U' }}
       </div>
       <div class="avatar-info">
-        <h4>{{ usuario.nombre_completo }}</h4>
-        <p class="role-badge">{{ usuario.rol?.nombre || 'Usuario' }}</p>
+        <h4>{{ usuario?.nombre_completo }}</h4>
+        <p class="role-badge">{{ usuario?.rol_nombre || usuario?.rol }}</p>
       </div>
     </div>
     

@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SeguridadService } from '../../../services/seguridad';
+import { Auth } from '../../../services/auth';
 
 @Component({
   selector: 'app-perfil',
@@ -21,6 +22,7 @@ export class Perfil implements OnInit {
 
   constructor(
     private seguridad: SeguridadService,
+    private auth: Auth,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -31,15 +33,29 @@ export class Perfil implements OnInit {
   loadMyProfile() {
     this.isLoading = true;
     this.cdr.detectChanges();
-    this.seguridad.getUsuarios().subscribe({
-      next: (data) => {
-        if (data && data.length > 0) {
-          this.usuario = data[0]; 
-        }
-        this.isLoading = false;
-        this.cdr.detectChanges();
-      }
-    });
+    
+    // Obtener los datos directamente del token de sesión (JWT)
+    this.usuario = {
+      id: this.auth.getEmail(), // Por ahora usamos email como ID o se deberia agregar ID al JWT
+      nombre_completo: this.auth.getName(),
+      email: this.auth.getEmail(),
+      rol_nombre: this.auth.getRole()
+    };
+    
+    // Si queremos el ID real para cambiar password, el JWT en router.py ya inyecta "id"
+    // Pero auth.ts no expone getId(). Extraigámoslo:
+    const token = this.auth.getToken();
+    if (token) {
+      try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const payload = JSON.parse(window.atob(base64));
+        this.usuario.id = payload.id;
+      } catch (e) {}
+    }
+
+    this.isLoading = false;
+    this.cdr.detectChanges();
   }
 
   cambiarPassword() {

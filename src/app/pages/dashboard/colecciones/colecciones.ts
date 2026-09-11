@@ -4,34 +4,34 @@ import { FormsModule } from '@angular/forms';
 import { Catalogo } from '../../../services/catalogo';
 
 @Component({
-  selector: 'app-categorias',
+  selector: 'app-colecciones',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './categorias.html',
-  styleUrls: ['./categorias.css']
+  templateUrl: './colecciones.html',
+  styleUrls: []
 })
-export class Categorias implements OnInit {
-  categorias: any[] = [];
+export class Colecciones implements OnInit {
+  colecciones: any[] = [];
   isLoading = false;
   
   // Modal state
   showModal = false;
-  nuevaCategoria = { nombre: '', descripcion: '' };
+  nuevaColeccion = { nombre: '' };
   editingId: number | null = null;
   isSaving = false;
 
   constructor(private catalogoService: Catalogo, private cdr: ChangeDetectorRef) {}
 
   ngOnInit() {
-    this.loadCategorias();
+    this.loadColecciones();
   }
 
-  loadCategorias() {
+  loadColecciones() {
     this.isLoading = true;
     this.cdr.detectChanges();
-    this.catalogoService.getCategorias().subscribe({
+    this.catalogoService.getColecciones().subscribe({
       next: (data) => {
-        this.categorias = data;
+        this.colecciones = data;
         this.isLoading = false;
         this.cdr.detectChanges();
       },
@@ -44,18 +44,15 @@ export class Categorias implements OnInit {
   }
 
   openModal() {
-    this.nuevaCategoria = { nombre: '', descripcion: '' };
+    this.nuevaColeccion = { nombre: '' };
     this.editingId = null;
     this.showModal = true;
     this.cdr.detectChanges();
   }
 
-  editCategoria(c: any) {
+  editColeccion(c: any) {
     this.editingId = c.id;
-    this.nuevaCategoria = {
-      nombre: c.nombre,
-      descripcion: c.descripcion
-    };
+    this.nuevaColeccion = { nombre: c.nombre };
     this.showModal = true;
     this.cdr.detectChanges();
   }
@@ -65,18 +62,18 @@ export class Categorias implements OnInit {
     this.cdr.detectChanges();
   }
 
-  guardarCategoria() {
-    if (!this.nuevaCategoria.nombre) return;
+  guardarColeccion() {
+    if (!this.nuevaColeccion.nombre) return;
     
     this.isSaving = true;
     this.cdr.detectChanges();
 
     if (this.editingId) {
-      this.catalogoService.updateCategoria(this.editingId, this.nuevaCategoria).subscribe({
+      this.catalogoService.updateColeccion(this.editingId, this.nuevaColeccion).subscribe({
         next: (res) => {
           this.isSaving = false;
           this.closeModal();
-          this.loadCategorias();
+          this.loadColecciones();
         },
         error: (err) => {
           console.error(err);
@@ -85,11 +82,11 @@ export class Categorias implements OnInit {
         }
       });
     } else {
-      this.catalogoService.createCategoria(this.nuevaCategoria).subscribe({
+      this.catalogoService.createColeccion(this.nuevaColeccion).subscribe({
         next: (res) => {
           this.isSaving = false;
           this.closeModal();
-          this.loadCategorias();
+          this.loadColecciones();
         },
         error: (err) => {
           console.error(err);
@@ -100,14 +97,14 @@ export class Categorias implements OnInit {
     }
   }
 
-  deleteCategoria(id: number) {
-    if (confirm('¿Estás seguro de que deseas eliminar esta categoría?')) {
-      this.catalogoService.deleteCategoria(id).subscribe({
+  deleteColeccion(id: number) {
+    if (confirm('¿Estás seguro de que deseas eliminar esta colección?')) {
+      this.catalogoService.deleteColeccion(id).subscribe({
         next: () => {
-          this.loadCategorias();
+          this.loadColecciones();
         },
         error: (err) => {
-          console.error('Error eliminando categoría:', err);
+          console.error('Error eliminando colección:', err);
         }
       });
     }

@@ -21,8 +21,9 @@
       <tr *ngFor="let cat of categorias">
         <td>#{{ cat.id }}</td>
         <td class="font-bold">{{ cat.nombre }}</td>
-        <td>
-          <button class="btn-edit">Editar</button>
+        <td class="action-buttons">
+          <button class="btn-edit" (click)="editCategoria(cat)">Editar</button>
+          <button class="btn-delete" (click)="deleteCategoria(cat.id)">Eliminar</button>
         </td>
       </tr>
       <tr *ngIf="categorias.length === 0">
@@ -36,7 +37,7 @@
 <div class="modal-overlay" *ngIf="showModal">
   <div class="modal-content glass-card">
     <div class="modal-header">
-      <h3>Crear Categoría</h3>
+      <h3>{{ editingId ? 'Editar Categoría' : 'Crear Categoría' }}</h3>
       <button class="btn-close" (click)="closeModal()">×</button>
     </div>
     <div class="modal-body">

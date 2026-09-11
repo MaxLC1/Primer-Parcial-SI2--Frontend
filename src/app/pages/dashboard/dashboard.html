@@ -6,14 +6,24 @@
       <h3>FashionStore</h3>
     </div>
     <nav class="nav-links">
-      <a routerLink="/dashboard/productos" routerLinkActive="active">Productos</a>
-      <a routerLink="/dashboard/categorias" routerLinkActive="active">Categorías</a>
-      <a routerLink="/dashboard/variantes" routerLinkActive="active">Tallas y Colores</a>
-      <a routerLink="/dashboard/inventario" routerLinkActive="active">Inventario</a>
-      <a routerLink="/dashboard/ventas" routerLinkActive="active">POS / Crear Venta</a>
-      <a routerLink="/dashboard/historial-ventas" routerLinkActive="active">Historial Reservas</a>
-      <a routerLink="/dashboard/sucursales" routerLinkActive="active">Sucursales</a>
-      <a routerLink="/dashboard/usuarios" routerLinkActive="active">Usuarios</a>
+      <!-- Productos y Categorías: Administrador y Encargado -->
+      <a *ngIf="userRole === 'Administrador' || userRole === 'Encargado'" routerLink="/dashboard/productos" routerLinkActive="active">Productos</a>
+      <a *ngIf="userRole === 'Administrador' || userRole === 'Encargado'" routerLink="/dashboard/categorias" routerLinkActive="active">Categorías</a>
+      <a *ngIf="userRole === 'Administrador' || userRole === 'Encargado'" routerLink="/dashboard/colecciones" routerLinkActive="active">Colecciones</a>
+      
+      <!-- Proveedores: Solo Administrador -->
+      <a *ngIf="userRole === 'Administrador'" routerLink="/dashboard/proveedores" routerLinkActive="active">Proveedores</a>
+      
+      <a *ngIf="userRole === 'Administrador' || userRole === 'Encargado'" routerLink="/dashboard/variantes" routerLinkActive="active">Tallas y Colores</a>
+      <a *ngIf="userRole === 'Administrador' || userRole === 'Encargado'" routerLink="/dashboard/inventario" routerLinkActive="active">Inventario</a>
+      
+      <!-- Ventas: Cajero y Administrador -->
+      <a *ngIf="userRole === 'Administrador' || userRole === 'Cajero'" routerLink="/dashboard/ventas" routerLinkActive="active">POS / Crear Venta</a>
+      <a *ngIf="userRole === 'Administrador' || userRole === 'Encargado'" routerLink="/dashboard/reservas" routerLinkActive="active">Gestión Reservas</a>
+      <a *ngIf="userRole === 'Administrador'" routerLink="/dashboard/historial-ventas" routerLinkActive="active">Historial Ventas</a>
+      
+      <a *ngIf="userRole === 'Administrador'" routerLink="/dashboard/sucursales" routerLinkActive="active">Sucursales</a>
+      <a *ngIf="userRole === 'Administrador'" routerLink="/dashboard/usuarios" routerLinkActive="active">Usuarios</a>
     </nav>
     <div class="logout">
       <button class="btn-secondary" (click)="logout()">Cerrar Sesión</button>
@@ -25,7 +35,7 @@
     <header class="topbar">
       <h2>Panel de Control</h2>
       <a routerLink="/dashboard/perfil" class="user-profile" style="text-decoration: none; color: inherit; cursor: pointer;">
-        <span>Admin Supremo</span>
+        <span>{{ userRole }}</span>
         <div class="avatar"></div>
       </a>
     </header>

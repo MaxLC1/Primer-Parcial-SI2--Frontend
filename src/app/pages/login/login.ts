@@ -28,7 +28,7 @@ export class Login {
     this.authService.login({ email: this.email, password: this.password }).subscribe({
       next: (res) => {
         // Guardar token y navegar al dashboard
-        localStorage.setItem('access_token', res.access_token);
+        localStorage.setItem('token', res.access_token);
         this.isLoading = false;
         this.router.navigate(['/dashboard']);
       },

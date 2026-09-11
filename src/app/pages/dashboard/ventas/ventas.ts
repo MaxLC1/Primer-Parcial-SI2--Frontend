@@ -2,6 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { forkJoin } from 'rxjs';
 import { VentasService } from '../../../services/ventas';
 
 @Component({
@@ -40,11 +41,23 @@ export class Ventas implements OnInit {
 
   loadData() {
     // Cargar catálogos básicos
-    this.http.get<any[]>('http://127.0.0.1:8000/api/v1/catalogo/productos').subscribe(d => this.productos = d);
-    this.http.get<any[]>('http://127.0.0.1:8000/api/v1/catalogo/tallas').subscribe(d => this.tallas = d);
-    this.http.get<any[]>('http://127.0.0.1:8000/api/v1/catalogo/colores').subscribe(d => this.colores = d);
-    this.http.get<any[]>('http://127.0.0.1:8000/api/v1/sucursales/sucursales').subscribe(d => this.sucursales = d);
-    this.http.get<any[]>('http://127.0.0.1:8000/api/v1/sucursales/inventarios').subscribe(d => this.inventarios = d);
+    forkJoin({
+      productos: this.http.get<any[]>('http://localhost:8000/api/v1/catalogo/productos'),
+      tallas: this.http.get<any[]>('http://localhost:8000/api/v1/catalogo/tallas'),
+      colores: this.http.get<any[]>('http://localhost:8000/api/v1/catalogo/colores'),
+      sucursales: this.http.get<any[]>('http://localhost:8000/api/v1/sucursales/sucursales'),
+      inventarios: this.http.get<any[]>('http://localhost:8000/api/v1/sucursales/inventarios')
+    }).subscribe({
+      next: (res: any) => {
+      this.productos = res.productos;
+      this.tallas = res.tallas;
+      this.colores = res.colores;
+      this.sucursales = res.sucursales;
+      this.inventarios = res.inventarios;
+      this.cdr.detectChanges();
+    }, error: (err) => {
+      console.error("Error loading data:", err);
+    }});
   }
 
   getProductoNombre(id: number): string { return this.productos.find(p => p.id === id)?.nombre || ''; }

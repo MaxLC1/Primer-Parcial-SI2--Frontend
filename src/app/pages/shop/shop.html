@@ -1,0 +1,112 @@
+<!-- Navbar de la Tienda -->
+<nav class="shop-navbar glass-card">
+  <div class="logo-container">
+    <div class="logo-icon small"></div>
+    <span class="brand-text">FashionStore AR</span>
+  </div>
+  
+  <div class="nav-links">
+    <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Inicio</a>
+    <a routerLink="/colecciones">Colecciones</a>
+    <a routerLink="/login" class="login-link">Acceso Empleados</a>
+  </div>
+
+  <div class="nav-actions">
+    <button class="cart-btn" (click)="toggleCart()">
+      🛒 <span class="cart-badge">{{ cartItems.length }}</span>
+    </button>
+  </div>
+</nav>
+
+<!-- Contenedor Principal donde se inyectan las páginas (Home, Producto, etc) -->
+<main class="shop-content">
+  <router-outlet></router-outlet>
+</main>
+
+<!-- Footer -->
+<footer class="shop-footer">
+  <p>&copy; 2026 FashionStore AR. Todos los derechos reservados.</p>
+</footer>
+
+<!-- Carrito Sidebar (Overlay) -->
+<div class="cart-overlay" *ngIf="isCartOpen" (click)="toggleCart()"></div>
+<div class="cart-sidebar" [class.open]="isCartOpen">
+  <div class="cart-header">
+    <h3>Tu Carrito</h3>
+    <button class="close-btn" (click)="toggleCart()">×</button>
+  </div>
+  
+  <div class="cart-body">
+    <div *ngIf="cartItems.length === 0" class="empty-cart">
+      <p>Tu carrito está vacío.</p>
+      <button class="btn-primary" (click)="toggleCart()">Explorar Catálogo</button>
+    </div>
+    
+    <!-- Items del Carrito -->
+    <div class="cart-items-list" *ngIf="cartItems.length > 0">
+      <div class="cart-item" *ngFor="let item of cartItems; let i = index">
+        <div class="item-info">
+          <h4>{{ item.producto.nombre }}</h4>
+          <p class="item-price">Bs. {{ item.producto.precio }} x {{ item.cantidad }}</p>
+        </div>
+        <div class="item-actions">
+          <span class="item-subtotal">Bs. {{ item.subtotal }}</span>
+          <button class="remove-btn" (click)="removeFromCart(i)">🗑️</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="cart-footer" *ngIf="cartItems.length > 0">
+    <div class="total-row">
+      <span>Total:</span>
+      <span class="font-bold text-primary">Bs. {{ cartService.getTotal() }}</span>
+    </div>
+    <button class="btn-primary full-width" (click)="openCheckout()">Proceder al Pago / Reserva</button>
+  </div>
+</div>
+
+<!-- Modal de Checkout -->
+<div class="checkout-overlay" *ngIf="isCheckoutOpen">
+  <div class="checkout-modal glass-card">
+    <div class="modal-header">
+      <h2>Completar Reserva</h2>
+      <button class="close-btn" (click)="closeCheckout()">×</button>
+    </div>
+    
+    <div class="modal-body">
+      <div class="form-group">
+        <label>Correo Electrónico</label>
+        <input type="email" class="input-field" placeholder="tu@correo.com" [(ngModel)]="correoCliente">
+      </div>
+      
+      <div class="form-group">
+        <label>Sucursal de Recojo</label>
+        <select class="input-field" [(ngModel)]="sucursalSeleccionada">
+          <option [value]="null" disabled selected>Selecciona una sucursal...</option>
+          <option *ngFor="let suc of sucursales" [value]="suc.id">{{ suc.nombre }}</option>
+        </select>
+      </div>
+      
+      <div class="order-summary">
+        <h4>Resumen de tu pedido</h4>
+        <div class="summary-row" *ngFor="let item of cartItems">
+          <span>{{ item.cantidad }}x {{ item.producto.nombre }}</span>
+          <span>Bs. {{ item.subtotal }}</span>
+        </div>
+        <hr>
+        <div class="summary-row total">
+          <span>Total a Pagar</span>
+          <span>Bs. {{ cartService.getTotal() }}</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="modal-footer">
+      <button class="btn-secondary" (click)="closeCheckout()">Cancelar</button>
+      <button class="btn-primary" (click)="confirmarReserva()" [disabled]="isProcessing || !sucursalSeleccionada || !correoCliente">
+        {{ isProcessing ? 'Procesando...' : 'Confirmar Reserva' }}
+      </button>
+    </div>
+  </div>
+</div>

@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class Catalogo {
-  private apiUrl = 'http://34.230.18.9:8000/api/v1/catalogo';
+  private apiUrl = 'http://localhost:8000/api/v1/catalogo';
 
   constructor(private http: HttpClient) { }
 
@@ -18,12 +18,28 @@ export class Catalogo {
     return this.http.post(`${this.apiUrl}/categorias`, categoria);
   }
 
+  updateCategoria(id: number, categoria: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/categorias/${id}`, categoria);
+  }
+
+  deleteCategoria(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/categorias/${id}`);
+  }
+
   getProductos(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/productos`);
   }
 
   createProducto(producto: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/productos`, producto);
+  }
+
+  updateProducto(id: number, producto: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/productos/${id}`, producto);
+  }
+
+  deleteProducto(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/productos/${id}`);
   }
 
   getTallas(): Observable<any[]> {
@@ -40,5 +56,21 @@ export class Catalogo {
 
   createColor(color: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/colores`, color);
+  }
+
+  getColecciones(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/colecciones`);
+  }
+
+  createColeccion(coleccion: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/colecciones`, coleccion);
+  }
+
+  updateColeccion(id: number, coleccion: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/colecciones/${id}`, coleccion);
+  }
+
+  deleteColeccion(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/colecciones/${id}`);
   }
 }
