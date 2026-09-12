@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Catalogo } from '../../../services/catalogo';
@@ -9,7 +9,8 @@ import { CartService } from '../../../services/cart';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './home.html',
-  styleUrls: ['./home.css']
+  styleUrls: ['./home.css'],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class Home implements OnInit {
   productos: any[] = [];
