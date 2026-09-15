@@ -126,7 +126,7 @@ export class Productos implements OnInit {
     const formData = new FormData();
     formData.append('file', file);
     return new Promise((resolve, reject) => {
-      this.http.post<any>('http://localhost:8000/api/v1/archivos/upload', formData).subscribe({
+      this.http.post<any>('http://192.168.100.4:8000/api/v1/archivos/upload', formData).subscribe({
         next: (res) => resolve(res.url),
         error: (err) => reject(err)
       });

@@ -63,7 +63,9 @@ td { color: var(--text-main); font-size: 0.95rem; }
 
 .modal-content {
   width: 100%; max-width: 650px; background: white; padding: 24px;
-  max-height: 90vh;
+  max-height: 85vh;
+  box-sizing: border-box;
+  border-radius: 16px;
   display: flex;
   flex-direction: column;
 }
