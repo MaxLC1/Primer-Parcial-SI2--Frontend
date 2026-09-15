@@ -29,7 +29,7 @@ export class Shop implements OnInit {
   }
 
   ngOnInit() {
-    this.http.get<any[]>('http://192.168.100.4:8000/api/v1/sucursales/sucursales').subscribe(res => {
+    this.http.get<any[]>('http://34.230.18.9:8000/api/v1/sucursales/sucursales').subscribe(res => {
       this.sucursales = res;
     });
   }
@@ -69,7 +69,7 @@ export class Shop implements OnInit {
       }))
     };
 
-    this.http.post('http://192.168.100.4:8000/api/v1/reservas/', payload).subscribe({
+    this.http.post('http://34.230.18.9:8000/api/v1/reservas/', payload).subscribe({
       next: () => {
         this.isProcessing = false;
         this.isCheckoutOpen = false;

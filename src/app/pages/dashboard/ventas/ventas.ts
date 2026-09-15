@@ -42,11 +42,11 @@ export class Ventas implements OnInit {
   loadData() {
     // Cargar catálogos básicos
     forkJoin({
-      productos: this.http.get<any[]>('http://192.168.100.4:8000/api/v1/catalogo/productos'),
-      tallas: this.http.get<any[]>('http://192.168.100.4:8000/api/v1/catalogo/tallas'),
-      colores: this.http.get<any[]>('http://192.168.100.4:8000/api/v1/catalogo/colores'),
-      sucursales: this.http.get<any[]>('http://192.168.100.4:8000/api/v1/sucursales/sucursales'),
-      inventarios: this.http.get<any[]>('http://192.168.100.4:8000/api/v1/sucursales/inventarios')
+      productos: this.http.get<any[]>('http://34.230.18.9:8000/api/v1/catalogo/productos'),
+      tallas: this.http.get<any[]>('http://34.230.18.9:8000/api/v1/catalogo/tallas'),
+      colores: this.http.get<any[]>('http://34.230.18.9:8000/api/v1/catalogo/colores'),
+      sucursales: this.http.get<any[]>('http://34.230.18.9:8000/api/v1/sucursales/sucursales'),
+      inventarios: this.http.get<any[]>('http://34.230.18.9:8000/api/v1/sucursales/inventarios')
     }).subscribe({
       next: (res: any) => {
       this.productos = res.productos;
