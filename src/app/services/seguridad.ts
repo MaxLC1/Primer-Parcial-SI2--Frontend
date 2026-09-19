@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class SeguridadService {
-  private apiUrl = 'http://34.230.18.9:8000/api/v1/seguridad';
+  private apiUrl = 'http://localhost:8000/api/v1/seguridad';
 
   constructor(private http: HttpClient) {}
 
@@ -23,4 +23,9 @@ export class SeguridadService {
   changePassword(data: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/change-password`, data);
   }
+
+  updateUsuario(id: number, data: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/usuarios/${id}`, data);
+  }
 }
+

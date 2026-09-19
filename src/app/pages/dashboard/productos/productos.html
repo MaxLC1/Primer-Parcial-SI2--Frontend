@@ -51,11 +51,28 @@
     </div>
     <div class="modal-body">
       
+      <div class="grid-2-col" style="display: flex; gap: 16px; margin-bottom: 16px;">
+        <div class="input-group" style="flex: 1; margin: 0;">
+          <label>Categoría</label>
+          <select class="input-field" [(ngModel)]="nuevoProducto.categoria_id">
+            <option [ngValue]="null" disabled selected>Categoría...</option>
+            <option *ngFor="let cat of categorias" [ngValue]="cat.id">{{ cat.nombre }}</option>
+          </select>
+        </div>
+        <div class="input-group" style="flex: 1; margin: 0;">
+          <label>Proveedor</label>
+          <select class="input-field" [(ngModel)]="nuevoProducto.proveedor_id">
+            <option [ngValue]="null">Sin Proveedor</option>
+            <option *ngFor="let prov of proveedores" [ngValue]="prov.id">{{ prov.nombre }}</option>
+          </select>
+        </div>
+      </div>
+
       <div class="input-group">
-        <label>Categoría</label>
-        <select class="input-field" [(ngModel)]="nuevoProducto.categoria_id">
-          <option [ngValue]="null" disabled selected>Selecciona una categoría...</option>
-          <option *ngFor="let cat of categorias" [ngValue]="cat.id">{{ cat.nombre }}</option>
+        <label>Colección</label>
+        <select class="input-field" [(ngModel)]="nuevoProducto.coleccion_id">
+          <option [ngValue]="null">Sin Colección</option>
+          <option *ngFor="let col of colecciones" [ngValue]="col.id">{{ col.nombre }}</option>
         </select>
       </div>
 
@@ -80,13 +97,13 @@
         <div style="margin-top: 10px;">
           <label style="font-size: 0.85rem; color: var(--text-muted); display: block; margin-bottom: 5px;">Subir Foto (2D)</label>
           <input type="file" accept="image/*" class="input-field" (change)="onFileSelected($event, 'imagen')">
-          <small *ngIf="nuevoProducto.imagen_url" style="display: block; margin-top: 5px;" class="text-muted">Ya tiene una imagen: <a [href]="nuevoProducto.imagen_url" target="_blank">Ver actual</a></small>
+          <small *ngIf="nuevoProducto.imagen_url" style="display: block; margin-top: 5px;" class="text-muted">Ya tiene una imagen: <a [href]="nuevoProducto.imagen_url" target="_blank">Ver actual</a> | <a href="javascript:void(0)" (click)="removeFile('imagen')" style="color: var(--danger); text-decoration: underline;">Eliminar</a></small>
         </div>
 
         <div style="margin-top: 15px;">
           <label style="font-size: 0.85rem; color: var(--text-muted); display: block; margin-bottom: 5px;">Subir Modelo (3D .glb / .gltf)</label>
           <input type="file" accept=".glb,.gltf" class="input-field" (change)="onFileSelected($event, 'modelo')">
-          <small *ngIf="nuevoProducto.modelo_3d_url" style="display: block; margin-top: 5px;" class="text-muted">Ya tiene un modelo 3D: <a [href]="nuevoProducto.modelo_3d_url" target="_blank">Ver actual</a></small>
+          <small *ngIf="nuevoProducto.modelo_3d_url" style="display: block; margin-top: 5px;" class="text-muted">Ya tiene un modelo 3D: <a [href]="nuevoProducto.modelo_3d_url" target="_blank">Ver actual</a> | <a href="javascript:void(0)" (click)="removeFile('modelo')" style="color: var(--danger); text-decoration: underline;">Eliminar</a></small>
         </div>
       </div>
 
@@ -99,3 +116,4 @@
     </div>
   </div>
 </div>
+

@@ -36,19 +36,24 @@ h3 { color: var(--text-main); font-size: 1.5rem; font-weight: 700; }
   background: var(--surface-color);
   border: var(--card-border);
   border-radius: 12px;
-  overflow: hidden;
+  overflow-y: auto;
+  overflow-x: auto;
+  max-height: calc(100vh - 180px);
   box-shadow: var(--card-shadow);
 }
 
 table { width: 100%; border-collapse: collapse; }
 th, td { padding: 16px; text-align: left; border-bottom: 1px solid var(--border-color); }
 th { 
-  background-color: #f8fafc; /* Gris muy clarito */
+  background-color: #f8fafc; 
   color: var(--text-muted); 
   font-weight: 700; 
   font-size: 0.8rem; 
   text-transform: uppercase; 
   letter-spacing: 1px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 td { color: var(--text-main); font-size: 0.95rem; vertical-align: top; }
 

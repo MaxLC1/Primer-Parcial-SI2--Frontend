@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ProveedoresService {
-  private apiUrl = 'http://34.230.18.9:8000/api/v1/catalogo/proveedores';
+  private apiUrl = 'http://localhost:8000/api/v1/catalogo/proveedores';
 
   constructor(private http: HttpClient) { }
 
@@ -19,6 +19,10 @@ export class ProveedoresService {
   }
 
   crearProveedor(proveedor: any): Observable<any> {
-    return this.http.post<any>(this.apiUrl, proveedor);
+    return this.http.post(this.apiUrl, proveedor);
+  }
+
+  updateProveedor(id: number, proveedor: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}`, proveedor);
   }
 }

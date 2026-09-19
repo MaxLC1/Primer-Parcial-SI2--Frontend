@@ -31,7 +31,7 @@
         </td>
         <td>
           <div class="action-buttons">
-            <button class="btn-edit">Editar</button>
+            <button class="btn-edit" (click)="editarUsuario(u)">Editar</button>
           </div>
         </td>
       </tr>
@@ -46,7 +46,7 @@
 <div class="modal-overlay" *ngIf="showModal">
   <div class="modal-content glass-card">
     <div class="modal-header">
-      <h3>Registrar Empleado</h3>
+      <h3>{{ isEditing ? 'Editar Empleado' : 'Registrar Empleado' }}</h3>
       <button class="btn-close" (click)="closeModal()">×</button>
     </div>
     <div class="modal-body">
@@ -67,7 +67,7 @@
 
       <div class="grid-2-col">
         <div class="input-group">
-          <label>Contraseña</label>
+          <label>Contraseña {{ isEditing ? '(Opcional)' : '' }}</label>
           <input type="password" class="input-field" placeholder="Min. 8 chars, 1 num, 1 especial" [(ngModel)]="password">
         </div>
         
@@ -80,13 +80,21 @@
         </div>
       </div>
 
+      <div class="input-group" *ngIf="isEditing" style="margin-top: 15px;">
+        <label style="display: flex; align-items: center; gap: 8px; font-weight: 600; cursor: pointer;">
+          <input type="checkbox" [(ngModel)]="is_active" style="transform: scale(1.2);">
+          Cuenta Activa (El empleado puede iniciar sesión)
+        </label>
+      </div>
+
     </div>
     <div class="modal-footer">
       <button class="btn-secondary" (click)="closeModal()">Cancelar</button>
       <button class="btn-primary" (click)="guardar()" 
-              [disabled]="isSaving || !nombre || !email || !password || !rol_id">
-        {{ isSaving ? 'Guardando...' : 'Crear Cuenta' }}
+              [disabled]="isSaving || !nombre || !email || !rol_id || (!isEditing && !password)">
+        {{ isSaving ? 'Guardando...' : (isEditing ? 'Guardar Cambios' : 'Crear Cuenta') }}
       </button>
     </div>
   </div>
 </div>
+

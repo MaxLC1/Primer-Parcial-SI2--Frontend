@@ -14,6 +14,8 @@ import { Catalogo } from '../../../services/catalogo';
 export class Productos implements OnInit {
   productos: any[] = [];
   categorias: any[] = []; // Para llenar el select desplegable
+  proveedores: any[] = [];
+  colecciones: any[] = [];
   isLoading = false;
   
   // Modal state
@@ -24,6 +26,8 @@ export class Productos implements OnInit {
     descripcion: '',
     precio: null as number | null,
     categoria_id: null as number | null,
+    proveedor_id: null as number | null,
+    coleccion_id: null as number | null,
     modelo_3d_url: '',
     imagen_url: ''
   };
@@ -44,6 +48,8 @@ export class Productos implements OnInit {
   ngOnInit() {
     this.loadProductos();
     this.loadCategorias();
+    this.loadProveedores();
+    this.loadColecciones();
   }
 
   loadProductos() {
@@ -72,6 +78,20 @@ export class Productos implements OnInit {
     });
   }
 
+  loadProveedores() {
+    this.http.get<any[]>('http://localhost:8000/api/v1/catalogo/proveedores').subscribe(data => {
+      this.proveedores = data;
+      this.cdr.detectChanges();
+    });
+  }
+
+  loadColecciones() {
+    this.catalogoService.getColecciones().subscribe(data => {
+      this.colecciones = data;
+      this.cdr.detectChanges();
+    });
+  }
+
   getCategoriaNombre(id: number): string {
     const cat = this.categorias.find(c => c.id === id);
     return cat ? cat.nombre : 'Desconocida';
@@ -83,6 +103,8 @@ export class Productos implements OnInit {
       descripcion: '',
       precio: null,
       categoria_id: null,
+      proveedor_id: null,
+      coleccion_id: null,
       modelo_3d_url: '',
       imagen_url: ''
     };
@@ -100,6 +122,8 @@ export class Productos implements OnInit {
       descripcion: p.descripcion,
       precio: p.precio,
       categoria_id: p.categoria_id,
+      proveedor_id: p.proveedor_id,
+      coleccion_id: p.coleccion_id,
       modelo_3d_url: p.modelo_3d_url || '',
       imagen_url: p.imagen_url || ''
     };
@@ -122,11 +146,22 @@ export class Productos implements OnInit {
     }
   }
 
+  removeFile(tipo: 'imagen' | 'modelo') {
+    if (tipo === 'imagen') {
+      this.nuevoProducto.imagen_url = '';
+      this.archivoImagen = null;
+    } else {
+      this.nuevoProducto.modelo_3d_url = '';
+      this.archivoModelo = null;
+    }
+    this.cdr.detectChanges();
+  }
+
   async uploadFile(file: File): Promise<string> {
     const formData = new FormData();
     formData.append('file', file);
     return new Promise((resolve, reject) => {
-      this.http.post<any>('http://34.230.18.9:8000/api/v1/archivos/upload', formData).subscribe({
+      this.http.post<any>('http://localhost:8000/api/v1/archivos/upload', formData).subscribe({
         next: (res) => resolve(res.url),
         error: (err) => reject(err)
       });
@@ -206,3 +241,4 @@ export class Productos implements OnInit {
     }
   }
 }
+

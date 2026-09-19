@@ -59,3 +59,4 @@ export class Home implements OnInit {
     document.getElementById('catalog')?.scrollIntoView({ behavior: 'smooth' });
   }
 }
+

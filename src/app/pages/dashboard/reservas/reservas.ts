@@ -8,11 +8,13 @@ import { ReservasService } from '../../../services/reservas';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './reservas.html',
-  styleUrls: []
+  styleUrls: ['./reservas.css']
 })
 export class Reservas implements OnInit {
   reservas: any[] = [];
   isLoading = false;
+
+  notificationMessage: string | null = null;
 
   constructor(private reservasService: ReservasService, private cdr: ChangeDetectorRef) {}
 
@@ -42,12 +44,22 @@ export class Reservas implements OnInit {
       this.reservasService.cambiarEstado(reserva.id, nuevoEstado).subscribe({
         next: () => {
           this.loadReservas();
+          this.mostrarNotificacion(`✉️ Sistema: Se ha notificado al cliente que su reserva está ${nuevoEstado}.`);
         },
         error: (err) => {
           console.error('Error actualizando estado:', err);
         }
       });
     }
+  }
+
+  mostrarNotificacion(mensaje: string) {
+    this.notificationMessage = mensaje;
+    this.cdr.detectChanges();
+    setTimeout(() => {
+      this.notificationMessage = null;
+      this.cdr.detectChanges();
+    }, 4000);
   }
 
   getEstadoClass(estado: string): string {
@@ -60,3 +72,4 @@ export class Reservas implements OnInit {
     }
   }
 }
+

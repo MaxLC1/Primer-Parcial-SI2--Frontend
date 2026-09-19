@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class InventarioService {
-  private apiUrl = 'http://34.230.18.9:8000/api/v1/sucursales';
+  private apiUrl = 'http://localhost:8000/api/v1/sucursales';
 
   constructor(private http: HttpClient) {}
 
@@ -15,4 +15,9 @@ export class InventarioService {
   addInventario(data: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/inventarios`, data);
   }
+
+  updateInventario(id: number, data: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/inventarios/${id}`, data);
+  }
 }
+

@@ -17,12 +17,15 @@ export class Usuarios implements OnInit {
 
   showModal = false;
   isSaving = false;
+  isEditing = false;
+  currentUserId: number | null = null;
   
-  // Registration form
+  // Form fields
   nombre = '';
   email = '';
   password = '';
   rol_id: number | null = null;
+  is_active = true;
   errorMsg = '';
 
   constructor(
@@ -57,10 +60,26 @@ export class Usuarios implements OnInit {
   }
 
   openModal() {
+    this.isEditing = false;
+    this.currentUserId = null;
     this.nombre = '';
     this.email = '';
     this.password = '';
     this.rol_id = null;
+    this.is_active = true;
+    this.errorMsg = '';
+    this.showModal = true;
+    this.cdr.detectChanges();
+  }
+
+  editarUsuario(u: any) {
+    this.isEditing = true;
+    this.currentUserId = u.id;
+    this.nombre = u.nombre_completo;
+    this.email = u.email;
+    this.password = ''; // Opcional al editar
+    this.rol_id = u.rol?.id || null;
+    this.is_active = u.is_active;
     this.errorMsg = '';
     this.showModal = true;
     this.cdr.detectChanges();
@@ -72,8 +91,8 @@ export class Usuarios implements OnInit {
   }
 
   guardar() {
-    if (!this.nombre || !this.email || !this.password || !this.rol_id) {
-      this.errorMsg = 'Por favor, llena todos los campos.';
+    if (!this.nombre || !this.email || !this.rol_id || (!this.isEditing && !this.password)) {
+      this.errorMsg = 'Por favor, llena los campos requeridos.';
       return;
     }
     
@@ -81,14 +100,22 @@ export class Usuarios implements OnInit {
     this.isSaving = true;
     this.cdr.detectChanges();
     
-    const payload = {
+    const payload: any = {
       nombre_completo: this.nombre,
       email: this.email,
-      password: this.password,
-      rol_id: this.rol_id
+      rol_id: this.rol_id,
+      is_active: this.is_active
     };
 
-    this.seguridad.register(payload).subscribe({
+    if (this.password) {
+      payload.password = this.password;
+    }
+
+    const obs = this.isEditing 
+      ? this.seguridad.updateUsuario(this.currentUserId!, payload)
+      : this.seguridad.register(payload);
+
+    obs.subscribe({
       next: () => {
         this.isSaving = false;
         this.closeModal();
@@ -110,3 +137,4 @@ export class Usuarios implements OnInit {
     });
   }
 }
+

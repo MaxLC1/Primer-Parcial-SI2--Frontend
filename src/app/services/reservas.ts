@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ReservasService {
-  private apiUrl = 'http://34.230.18.9:8000/api/v1/reservas';
+  private apiUrl = 'http://localhost:8000/api/v1/reservas';
 
   constructor(private http: HttpClient) { }
 
@@ -19,6 +19,7 @@ export class ReservasService {
   }
 
   cambiarEstado(id: number, estado: string): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/${id}/estado`, { estado });
+    return this.http.patch<any>(`${this.apiUrl}/${id}/estado?estado=${estado}`, {});
   }
 }
+

@@ -7,7 +7,8 @@ import { ProveedoresService } from '../../../services/proveedores';
   selector: 'app-proveedores',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './proveedores.html'
+  templateUrl: './proveedores.html',
+  styleUrls: ['./proveedores.css']
 })
 export class Proveedores implements OnInit {
   proveedores: any[] = [];
@@ -69,33 +70,22 @@ export class Proveedores implements OnInit {
     this.isSaving = true;
     this.cdr.detectChanges();
 
-    if (this.editingId) {
-        // Asumiendo que despues añadas updateProveedor al service
-        this.proveedoresService.crearProveedor(this.nuevoProveedor).subscribe({
-            next: (res) => {
-              this.isSaving = false;
-              this.closeModal();
-              this.loadProveedores();
-            },
-            error: (err) => {
-              console.error(err);
-              this.isSaving = false;
-              this.cdr.detectChanges();
-            }
-          });
-    } else {
-      this.proveedoresService.crearProveedor(this.nuevoProveedor).subscribe({
-        next: (res) => {
-          this.isSaving = false;
-          this.closeModal();
-          this.loadProveedores();
-        },
-        error: (err) => {
-          console.error(err);
-          this.isSaving = false;
-          this.cdr.detectChanges();
-        }
-      });
-    }
+    const obs = this.editingId
+      ? this.proveedoresService.updateProveedor(this.editingId, this.nuevoProveedor)
+      : this.proveedoresService.crearProveedor(this.nuevoProveedor);
+
+    obs.subscribe({
+      next: (res) => {
+        this.isSaving = false;
+        this.closeModal();
+        this.loadProveedores();
+      },
+      error: (err) => {
+        console.error(err);
+        this.isSaving = false;
+        this.cdr.detectChanges();
+      }
+    });
   }
 }
+

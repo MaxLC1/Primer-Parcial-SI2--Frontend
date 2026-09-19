@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class VentasService {
-  private apiUrl = 'http://34.230.18.9:8000/api/v1/ventas';
+  private apiUrl = 'http://localhost:8000/api/v1/ventas';
 
   constructor(private http: HttpClient) {}
 
@@ -18,3 +18,4 @@ export class VentasService {
     return this.http.get<any[]>(`${this.apiUrl}/`);
   }
 }
+

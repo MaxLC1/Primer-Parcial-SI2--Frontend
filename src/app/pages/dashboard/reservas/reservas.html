@@ -5,6 +5,10 @@
   </div>
 </div>
 
+<div class="notification-toast" *ngIf="notificationMessage">
+  {{ notificationMessage }}
+</div>
+
 <div class="table-container">
   <div *ngIf="isLoading" class="loading-state">Cargando reservas...</div>
   
@@ -38,3 +42,4 @@
     </tbody>
   </table>
 </div>
+

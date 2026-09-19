@@ -8,7 +8,7 @@ import { Catalogo } from '../../../services/catalogo';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './colecciones.html',
-  styleUrls: []
+  styleUrls: ['./colecciones.css']
 })
 export class Colecciones implements OnInit {
   colecciones: any[] = [];
@@ -110,3 +110,4 @@ export class Colecciones implements OnInit {
     }
   }
 }
+

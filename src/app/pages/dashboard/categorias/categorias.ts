@@ -16,7 +16,7 @@ export class Categorias implements OnInit {
   
   // Modal state
   showModal = false;
-  nuevaCategoria = { nombre: '', descripcion: '' };
+  nuevaCategoria = { nombre: '', descripcion: '', activo: true };
   editingId: number | null = null;
   isSaving = false;
 
@@ -36,7 +36,7 @@ export class Categorias implements OnInit {
         this.cdr.detectChanges();
       },
       error: (err) => {
-        console.error(err);
+        alert("Error cargando categorías: " + (err.error?.detail || err.message));
         this.isLoading = false;
         this.cdr.detectChanges();
       }
@@ -44,7 +44,7 @@ export class Categorias implements OnInit {
   }
 
   openModal() {
-    this.nuevaCategoria = { nombre: '', descripcion: '' };
+    this.nuevaCategoria = { nombre: '', descripcion: '', activo: true };
     this.editingId = null;
     this.showModal = true;
     this.cdr.detectChanges();
@@ -54,7 +54,8 @@ export class Categorias implements OnInit {
     this.editingId = c.id;
     this.nuevaCategoria = {
       nombre: c.nombre,
-      descripcion: c.descripcion
+      descripcion: c.descripcion,
+      activo: c.activo
     };
     this.showModal = true;
     this.cdr.detectChanges();
@@ -79,7 +80,7 @@ export class Categorias implements OnInit {
           this.loadCategorias();
         },
         error: (err) => {
-          console.error(err);
+          alert("Error al actualizar la categoría: " + (err.error?.detail || err.message));
           this.isSaving = false;
           this.cdr.detectChanges();
         }
@@ -92,7 +93,7 @@ export class Categorias implements OnInit {
           this.loadCategorias();
         },
         error: (err) => {
-          console.error(err);
+          alert("Error al crear la categoría: " + (err.error?.detail || err.message));
           this.isSaving = false;
           this.cdr.detectChanges();
         }
@@ -107,9 +108,10 @@ export class Categorias implements OnInit {
           this.loadCategorias();
         },
         error: (err) => {
-          console.error('Error eliminando categoría:', err);
+          alert("Error eliminando categoría: " + (err.error?.detail || err.message));
         }
       });
     }
   }
 }
+
