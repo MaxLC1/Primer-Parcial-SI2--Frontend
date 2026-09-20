@@ -135,4 +135,5 @@
   border: var(--card-border);
   box-shadow: var(--card-shadow);
   border-radius: 12px;
+  overflow-y: auto;
 }
