@@ -2,7 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-const API_URL = 'http://localhost:8000/api/v1';
+const API_URL = 'http://34.230.18.9:8000/api/v1';
 
 @Component({
   selector: 'app-delivery',
