@@ -88,23 +88,53 @@ export class Inventario implements OnInit {
       const sentence = this.searchText.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
       const sentenceWords = sentence.split(/\s+/).map(w => w.replace(/[¿?.,!]/g, ''));
       
+      // 1. Obtenemos todas las sucursales únicas para saber si el usuario mencionó alguna
+      const allSucursales = Array.from(new Set(this.inventarios.map(i => (i.sucursal?.nombre || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""))));
+      const mentionedSucursales = allSucursales.filter(suc => sentence.includes(suc));
+
+      // 2. Primera pasada: detectar si la frase menciona ALGUN producto, color o talla del sistema globalmente
+      let globalMentionedFeatures = false;
+      for (const inv of baseInventarios) {
+        const prodName = (inv.producto?.nombre || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        const colorName = (inv.color?.nombre || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        const tallaName = (inv.talla?.nombre || '').toLowerCase();
+        
+        let matchesProduct = false;
+        if (sentence.includes(prodName) || prodName.includes(sentence)) {
+          matchesProduct = true;
+        } else {
+          const prodWords = prodName.split(/\s+/).filter((w: string) => w.length > 2);
+          matchesProduct = prodWords.some((pw: string) => 
+            sentenceWords.some(sw => sw.includes(pw) || pw.includes(sw.replace(/s$/, '')))
+          );
+        }
+        const matchesColor = colorName && sentenceWords.some(sw => sw.includes(colorName) || colorName.includes(sw));
+        const matchesTalla = tallaName && sentenceWords.some(sw => sw === tallaName);
+
+        if (matchesProduct || matchesColor || matchesTalla) {
+          globalMentionedFeatures = true;
+          break;
+        }
+      }
+      
+      // 3. Segunda pasada: filtrar
       this.filteredInventarios = baseInventarios.filter(inv => {
         const prodName = (inv.producto?.nombre || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         const colorName = (inv.color?.nombre || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         const tallaName = (inv.talla?.nombre || '').toLowerCase();
         const sucursalName = (inv.sucursal?.nombre || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         
-        // 1. Evaluar si la frase menciona alguna sucursal del sistema
-        // Obtenemos todas las sucursales únicas para saber si el usuario mencionó alguna
-        const allSucursales = Array.from(new Set(this.inventarios.map(i => (i.sucursal?.nombre || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""))));
-        const mentionedSucursales = allSucursales.filter(suc => sentence.includes(suc));
-        
         // Si mencionó sucursales, esta fila DEBE pertenecer a una de las mencionadas
         if (mentionedSucursales.length > 0 && !mentionedSucursales.includes(sucursalName)) {
           return false; // Filtro estricto (AND)
         }
 
-        // 2. Evaluar producto
+        // Si el usuario SOLO mencionó sucursales y ningún producto/color/talla en toda la frase, mostramos todo
+        if (!globalMentionedFeatures && mentionedSucursales.length > 0) {
+          return true;
+        }
+
+        // Evaluar producto
         let matchesProduct = false;
         if (sentence.includes(prodName) || prodName.includes(sentence)) {
           matchesProduct = true;
@@ -115,16 +145,10 @@ export class Inventario implements OnInit {
           );
         }
         
-        // 3. Evaluar color y talla
+        // Evaluar color y talla
         const matchesColor = colorName && sentenceWords.some(sw => sw.includes(colorName) || colorName.includes(sw));
         const matchesTalla = tallaName && sentenceWords.some(sw => sw === tallaName);
         
-        // Retornar true si coincide con el producto, color O talla (la sucursal ya fue forzada arriba)
-        // Si no detectó producto, color ni talla (ej. solo dijo "sucursal sur"), mostramos todo lo de esa sucursal
-        if (!matchesProduct && !matchesColor && !matchesTalla && mentionedSucursales.length > 0) {
-          return true;
-        }
-
         return matchesProduct || matchesColor || matchesTalla;
       });
     }
