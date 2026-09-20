@@ -52,7 +52,7 @@ export class Delivery implements OnInit {
       });
       const ventas = resVentas.ok ? await resVentas.json() : [];
 
-      const resUsuarios = await fetch(`${API_URL}/usuarios/`, {
+      const resUsuarios = await fetch(`${API_URL}/seguridad/usuarios`, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const usuarios = resUsuarios.ok ? await resUsuarios.json() : [];
