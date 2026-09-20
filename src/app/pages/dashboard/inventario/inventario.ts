@@ -86,7 +86,10 @@ export class Inventario implements OnInit {
       this.filteredInventarios = baseInventarios;
     } else {
       const sentence = this.searchText.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-      const sentenceWords = sentence.split(/\s+/).map(w => w.replace(/[¿?.,!]/g, ''));
+      const stopWords = ['el', 'la', 'los', 'las', 'un', 'una', 'unos', 'unas', 'de', 'del', 'en', 'para', 'por', 'con'];
+      const sentenceWords = sentence.split(/\s+/)
+        .map(w => w.replace(/[¿?.,!]/g, ''))
+        .filter(w => w.length > 2 && !stopWords.includes(w));
       
       // 1. Obtenemos todas las sucursales únicas para saber si el usuario mencionó alguna
       const allSucursales = Array.from(new Set(this.inventarios.map(i => (i.sucursal?.nombre || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""))));
@@ -105,10 +108,10 @@ export class Inventario implements OnInit {
         } else {
           const prodWords = prodName.split(/\s+/).filter((w: string) => w.length > 2);
           matchesProduct = prodWords.some((pw: string) => 
-            sentenceWords.some(sw => sw.includes(pw) || pw.includes(sw.replace(/s$/, '')))
+            sentenceWords.some(sw => pw === sw || pw === sw.replace(/s$/, '') || sw === pw.replace(/s$/, ''))
           );
         }
-        const matchesColor = colorName && sentenceWords.some(sw => sw.includes(colorName) || colorName.includes(sw));
+        const matchesColor = colorName && sentenceWords.some(sw => colorName.includes(sw));
         const matchesTalla = tallaName && sentenceWords.some(sw => sw === tallaName);
 
         if (matchesProduct || matchesColor || matchesTalla) {
@@ -141,7 +144,7 @@ export class Inventario implements OnInit {
         } else {
           const prodWords = prodName.split(/\s+/).filter((w: string) => w.length > 2);
           matchesProduct = prodWords.some((pw: string) => 
-            sentenceWords.some(sw => sw.includes(pw) || pw.includes(sw.replace(/s$/, '')))
+            sentenceWords.some(sw => pw === sw || pw === sw.replace(/s$/, '') || sw === pw.replace(/s$/, ''))
           );
         }
         
