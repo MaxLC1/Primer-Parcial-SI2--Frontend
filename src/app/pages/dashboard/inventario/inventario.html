@@ -13,6 +13,13 @@
            [(ngModel)]="searchText" (input)="filtrarInventario()" 
            style="width: 100%; margin: 0; padding-left: 45px; border-radius: 8px; border: 1px solid #ddd; height: 45px; font-size: 1rem;">
   </div>
+
+  <div style="width: 220px;">
+    <select class="input-field" [(ngModel)]="filtroSucursal" (change)="filtrarInventario()" style="width: 100%; height: 45px; border-radius: 8px; border: 1px solid #ddd; margin: 0; padding: 0 15px; cursor: pointer;">
+      <option [ngValue]="null">Todas las sucursales</option>
+      <option *ngFor="let s of sucursales" [ngValue]="s.id">{{ s.nombre }}</option>
+    </select>
+  </div>
   
   <button class="btn-primary" (click)="iniciarBusquedaPorVoz()" 
           [ngClass]="{'pulse-animation': isListening}" 

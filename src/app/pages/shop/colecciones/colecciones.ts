@@ -15,7 +15,12 @@ import { CartService } from '../../../services/cart';
 export class ShopColecciones implements OnInit {
   colecciones: any[] = [];
   productos: any[] = [];
+  tallas: any[] = [];
+  colores: any[] = [];
   isLoading = false;
+
+  selectedTalla: { [productoId: number]: number } = {};
+  selectedColor: { [productoId: number]: number } = {};
 
   constructor(
     private catalogo: Catalogo, 
@@ -27,7 +32,10 @@ export class ShopColecciones implements OnInit {
     this.isLoading = true;
     this.cdr.detectChanges();
     
-    // Cargar colecciones
+    // Cargar colecciones, tallas y colores
+    this.catalogo.getTallas().subscribe(res => this.tallas = res);
+    this.catalogo.getColores().subscribe(res => this.colores = res);
+
     this.catalogo.getColecciones().subscribe({
       next: (res) => {
         this.colecciones = res;
@@ -81,6 +89,14 @@ export class ShopColecciones implements OnInit {
   }
 
   addToCart(producto: any) {
-    this.cartService.addToCart(producto);
+    const tId = this.selectedTalla[producto.id];
+    const cId = this.selectedColor[producto.id];
+    
+    if (!tId || !cId) {
+      alert("Por favor selecciona una talla y un color antes de añadir al carrito.");
+      return;
+    }
+    
+    this.cartService.addToCart(producto, 1, tId, cId);
   }
 }

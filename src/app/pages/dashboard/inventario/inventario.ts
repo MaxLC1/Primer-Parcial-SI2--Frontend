@@ -70,17 +70,25 @@ export class Inventario implements OnInit {
 
   // --- Búsqueda por Voz ---
   searchText = '';
+  filtroSucursal: number | null = null;
   filteredInventarios: any[] = [];
   isListening = false;
 
   filtrarInventario() {
+    let baseInventarios = this.inventarios;
+    
+    // 1. Filtro estricto por Dropdown de Sucursal
+    if (this.filtroSucursal) {
+      baseInventarios = baseInventarios.filter(inv => inv.sucursal?.id === this.filtroSucursal);
+    }
+
     if (!this.searchText || this.searchText.trim() === '') {
-      this.filteredInventarios = this.inventarios;
+      this.filteredInventarios = baseInventarios;
     } else {
       const sentence = this.searchText.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
       const sentenceWords = sentence.split(/\s+/).map(w => w.replace(/[¿?.,!]/g, ''));
       
-      this.filteredInventarios = this.inventarios.filter(inv => {
+      this.filteredInventarios = baseInventarios.filter(inv => {
         const prodName = (inv.producto?.nombre || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         const colorName = (inv.color?.nombre || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         const tallaName = (inv.talla?.nombre || '').toLowerCase();

@@ -53,6 +53,18 @@
               <div class="brand">{{ producto.categoria?.nombre || 'Categoría' }}</div>
               <h3 class="product-title">{{ producto.nombre }}</h3>
               <p class="product-price">Bs. {{ producto.precio }}</p>
+              
+              <div style="display: flex; gap: 8px; margin-bottom: 12px; margin-top: 10px;">
+                <select class="input-field" [(ngModel)]="selectedTalla[producto.id]" style="flex: 1; padding: 6px 10px; border-radius: 6px; border: 1px solid #ddd; font-size: 0.85rem;">
+                  <option [ngValue]="undefined" disabled selected>Talla</option>
+                  <option *ngFor="let t of tallas" [ngValue]="t.id">{{ t.nombre }}</option>
+                </select>
+                <select class="input-field" [(ngModel)]="selectedColor[producto.id]" style="flex: 1; padding: 6px 10px; border-radius: 6px; border: 1px solid #ddd; font-size: 0.85rem;">
+                  <option [ngValue]="undefined" disabled selected>Color</option>
+                  <option *ngFor="let c of colores" [ngValue]="c.id">{{ c.nombre }}</option>
+                </select>
+              </div>
+
               <button class="btn-primary outline full-width" (click)="addToCart(producto)">Añadir al carrito</button>
             </div>
           </div>
@@ -103,6 +115,18 @@
             <div class="brand">{{ producto.categoria?.nombre || 'Categoría' }}</div>
             <h3 class="product-title">{{ producto.nombre }}</h3>
             <p class="product-price">Bs. {{ producto.precio }}</p>
+
+            <div style="display: flex; gap: 8px; margin-bottom: 12px; margin-top: 10px;">
+              <select class="input-field" [(ngModel)]="selectedTalla[producto.id]" style="flex: 1; padding: 6px 10px; border-radius: 6px; border: 1px solid #ddd; font-size: 0.85rem;">
+                <option [ngValue]="undefined" disabled selected>Talla</option>
+                <option *ngFor="let t of tallas" [ngValue]="t.id">{{ t.nombre }}</option>
+              </select>
+              <select class="input-field" [(ngModel)]="selectedColor[producto.id]" style="flex: 1; padding: 6px 10px; border-radius: 6px; border: 1px solid #ddd; font-size: 0.85rem;">
+                <option [ngValue]="undefined" disabled selected>Color</option>
+                <option *ngFor="let c of colores" [ngValue]="c.id">{{ c.nombre }}</option>
+              </select>
+            </div>
+
             <button class="btn-primary outline full-width" (click)="addToCart(producto)">Añadir al carrito</button>
           </div>
         </div>
