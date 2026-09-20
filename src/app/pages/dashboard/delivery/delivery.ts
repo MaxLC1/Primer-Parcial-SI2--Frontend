@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Auth } from '../../../services/auth';
 
 const API_URL = 'http://34.230.18.9/api/v1';
 
@@ -19,8 +20,8 @@ export class Delivery implements OnInit {
   isAdmin = false;
   repartidores: any[] = [];
 
-  constructor(private cdr: ChangeDetectorRef) {
-    this.isAdmin = localStorage.getItem('user_role') === 'Administrador';
+  constructor(private cdr: ChangeDetectorRef, private auth: Auth) {
+    this.isAdmin = this.auth.getRole() === 'Administrador';
   }
 
   ngOnInit() {
