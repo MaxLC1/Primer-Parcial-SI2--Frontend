@@ -18,9 +18,15 @@
     </div>
     
     <div class="card-body">
-      <div style="margin-bottom: 10px;">
+      <div style="margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
         <span class="badge" [ngStyle]="{'background': d.tipo === 'ENVÍO' ? '#e8f5e9' : '#fff3e0', 'color': d.tipo === 'ENVÍO' ? '#2e7d32' : '#e65100'}">
           {{ d.tipo }}
+        </span>
+        <span class="text-muted" style="font-size: 0.8rem;" *ngIf="d.repartidor">
+          👤 {{ d.repartidor.nombre_completo || 'Repartidor' }}
+        </span>
+        <span class="text-muted" style="font-size: 0.8rem; color: #f59e0b;" *ngIf="!d.repartidor">
+          ⚠ Sin Asignar
         </span>
       </div>
       

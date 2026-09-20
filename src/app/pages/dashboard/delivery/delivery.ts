@@ -46,8 +46,16 @@ export class Delivery implements OnInit {
       });
       const ventas = resVentas.ok ? await resVentas.json() : [];
 
+      const resUsuarios = await fetch(`${API_URL}/usuarios/`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      const usuarios = resUsuarios.ok ? await resUsuarios.json() : [];
+
       this.deliveries = data.map((d: any) => {
         d.nuevoEstado = d.estado;
+        if (d.repartidor_id) {
+          d.repartidor = usuarios.find((u: any) => u.id === d.repartidor_id);
+        }
         if (d.devolucion_id) {
           d.tipo = 'RECOJO';
           d.devolucion = devs.find((dev: any) => dev.id === d.devolucion_id);
