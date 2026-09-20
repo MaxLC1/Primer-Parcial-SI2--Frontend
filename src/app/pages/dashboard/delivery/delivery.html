@@ -44,16 +44,31 @@
     </div>
     
     <div class="card-footer" style="margin-top: 20px; display: flex; flex-direction: column; gap: 10px;">
-      <select class="input-field" [(ngModel)]="d.nuevoEstado" style="width: 100%; margin: 0; padding: 8px; border-radius: 6px;">
-        <option value="Pendiente">Pendiente</option>
-        <option value="Asignado">Asignado</option>
-        <option value="En Camino">En Camino</option>
-        <option value="Recogido">Recogido</option>
-        <option value="Completado">Completado</option>
-      </select>
-      <button class="btn-primary" (click)="actualizarEstado(d)" [disabled]="isSaving || d.estado === d.nuevoEstado" style="width: 100%; padding: 8px 15px; font-size: 0.9rem;">
-        Actualizar
-      </button>
+      
+      <!-- Asignar Repartidor (Solo Admin) -->
+      <div *ngIf="isAdmin" style="display: flex; gap: 8px;">
+        <select class="input-field" [(ngModel)]="d.nuevoRepartidorId" style="flex: 1; margin: 0; padding: 8px; border-radius: 6px;">
+          <option [ngValue]="null" disabled selected>Asignar a...</option>
+          <option *ngFor="let r of repartidores" [ngValue]="r.id">{{ r.nombre_completo }}</option>
+        </select>
+        <button class="btn-primary outline" (click)="asignarRepartidor(d)" [disabled]="isSaving || d.repartidor_id === d.nuevoRepartidorId || !d.nuevoRepartidorId" style="padding: 8px 15px; font-size: 0.9rem;">
+          Asignar
+        </button>
+      </div>
+
+      <!-- Cambiar Estado -->
+      <div style="display: flex; gap: 8px;">
+        <select class="input-field" [(ngModel)]="d.nuevoEstado" style="flex: 1; margin: 0; padding: 8px; border-radius: 6px;">
+          <option value="Pendiente">Pendiente</option>
+          <option value="Asignado">Asignado</option>
+          <option value="En Camino">En Camino</option>
+          <option value="Recogido">Recogido</option>
+          <option value="Completado">Completado</option>
+        </select>
+        <button class="btn-primary" (click)="actualizarEstado(d)" [disabled]="isSaving || d.estado === d.nuevoEstado" style="padding: 8px 15px; font-size: 0.9rem;">
+          Actualizar
+        </button>
+      </div>
     </div>
   </div>
 

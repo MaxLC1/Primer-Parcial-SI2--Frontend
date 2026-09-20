@@ -16,7 +16,12 @@ export class Delivery implements OnInit {
   isLoading = true;
   isSaving = false;
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  isAdmin = false;
+  repartidores: any[] = [];
+
+  constructor(private cdr: ChangeDetectorRef) {
+    this.isAdmin = localStorage.getItem('user_role') === 'Administrador';
+  }
 
   ngOnInit() {
     this.cargarDeliveries();
@@ -50,9 +55,14 @@ export class Delivery implements OnInit {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const usuarios = resUsuarios.ok ? await resUsuarios.json() : [];
+      
+      if (this.isAdmin) {
+        this.repartidores = usuarios.filter((u: any) => u.rol?.nombre === 'Repartidor');
+      }
 
       this.deliveries = data.map((d: any) => {
         d.nuevoEstado = d.estado;
+        d.nuevoRepartidorId = d.repartidor_id;
         if (d.repartidor_id) {
           d.repartidor = usuarios.find((u: any) => u.id === d.repartidor_id);
         }
@@ -92,6 +102,11 @@ export class Delivery implements OnInit {
       
       if (res.ok) {
         d.estado = d.nuevoEstado;
+        // Si el estado es Asignado y es repartidor, la API backend autoasigna.
+        // Recargamos silenciosamente para obtener el nombre del repartidor asignado.
+        if (d.estado === 'Asignado' && !this.isAdmin) {
+          this.cargarDeliveries();
+        }
       } else {
         alert('Error al actualizar estado');
         d.nuevoEstado = d.estado; // rollback UI
@@ -99,6 +114,35 @@ export class Delivery implements OnInit {
     } catch (e) {
       console.error(e);
       d.nuevoEstado = d.estado;
+    }
+    this.isSaving = false;
+    this.cdr.detectChanges();
+  }
+
+  async asignarRepartidor(d: any) {
+    if (d.repartidor_id === d.nuevoRepartidorId) return;
+    
+    this.isSaving = true;
+    try {
+      const token = localStorage.getItem('token');
+      const res = await fetch(`${API_URL}/delivery/${d.id}/asignar`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ repartidor_id: d.nuevoRepartidorId })
+      });
+      
+      if (res.ok) {
+        this.cargarDeliveries(); // Recargar para actualizar UI completo
+      } else {
+        alert('Error al asignar repartidor');
+        d.nuevoRepartidorId = d.repartidor_id; // rollback UI
+      }
+    } catch (e) {
+      console.error(e);
+      d.nuevoRepartidorId = d.repartidor_id;
     }
     this.isSaving = false;
     this.cdr.detectChanges();
