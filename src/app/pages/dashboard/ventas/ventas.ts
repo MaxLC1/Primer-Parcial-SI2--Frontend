@@ -178,6 +178,7 @@ export class Ventas implements OnInit {
   qrTxId: string = '';
   pollingInterval: any;
   paymentSuccessQR: boolean = false;
+  paymentSuccessStripe: boolean = false;
 
   confirmarPagoQR() {
     this.isProcessing = true;
@@ -267,8 +268,15 @@ export class Ventas implements OnInit {
       next: (res) => {
         // Obtenemos el client_secret de la simulación
         const txId = res.client_secret;
-        this.enviarVentaBackend('Stripe', txId);
-        this.showModalStripe = false;
+        
+        this.paymentSuccessStripe = true;
+        this.cdr.detectChanges();
+        
+        setTimeout(() => {
+          this.enviarVentaBackend('Stripe', txId);
+          this.showModalStripe = false;
+          this.paymentSuccessStripe = false;
+        }, 2000);
       },
       error: (err) => {
         alert("Error en la pasarela de pago: " + (err.error?.detail || err.message));

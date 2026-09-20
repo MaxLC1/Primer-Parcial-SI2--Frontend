@@ -171,7 +171,8 @@
     </div>
     
     <div class="stripe-modal-body">
-      <div class="stripe-amount-header">
+      <ng-container *ngIf="!paymentSuccessStripe">
+        <div class="stripe-amount-header">
         <span class="stripe-amount-label">Monto a pagar</span>
         <span class="stripe-amount-value">Bs. {{ getTotal() }}</span>
       </div>
@@ -197,6 +198,18 @@
       <button class="stripe-pay-btn" (click)="confirmarPagoStripe()" [disabled]="isProcessing">
         {{ isProcessing ? 'Procesando...' : 'Pagar' }}
       </button>
+      </ng-container>
+
+      <ng-container *ngIf="paymentSuccessStripe">
+        <div style="padding: 40px 20px; display: flex; flex-direction: column; align-items: center;">
+          <svg class="success-checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+            <circle class="success-checkmark-circle" cx="26" cy="26" r="25" fill="none" />
+            <path class="success-checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+          </svg>
+          <h3 style="color: #16a34a; margin: 0;">¡Pago Exitoso!</h3>
+          <p class="text-muted" style="margin-top: 8px;">Procesando tu recibo...</p>
+        </div>
+      </ng-container>
     </div>
   </div>
 </div>
